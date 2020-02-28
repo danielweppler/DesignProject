@@ -31,15 +31,29 @@ const int rightMotorPin = 8;
 const int leftMotorPin = 9;
 const int liftMotorPin = 10;
 const int winchMotorPin = 11;
+const int ledPin = 13;
 
 //constant values like motor speeds/ positions
+const int motorSpeed = 1600;
+const int motorStop = 1500;
+const int leftOffset;
+const int rightOffset;
 
+const int blinkInterval=1000;
 //
 
 //variables
 unsigned long leftEchoTime;
 unsigned long middleEchoTime;
 unsigned long rightEchoTime;
+
+unsigned long ledMillis =0;
+bool ledState = true;
+
+//mode functionality
+bool buttonState;
+bool buttonPreviousState = false;
+int mode=0;
 
 
 //headers

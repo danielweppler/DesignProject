@@ -6,6 +6,9 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
 
+  //mode button setup
+  pinMode(modeButton, INPUT_PULLUP);
+
   //ultrasonic setup
   pinMode(leftUltrasonicPing, OUTPUT);
   pinMode(leftUltrasonicData, INPUT);
@@ -35,5 +38,47 @@ void setup() {
 
 void loop() {
 
+  // mode functionality
+  buttonState = !digitalRead(modeButton);
+
+  if (buttonState && buttonState != buttonPreviousState)
+  {
+    buttonPreviousState = buttonState;
+    mode++;
+    mode = mode & 3;
+  }
+  else if (!buttonState && buttonState != buttonPreviousState)
+  {
+    buttonPreviousState = buttonState;
+  }
+
+  switch (mode) {
+
+    case 0:
+      {
+        leftMotor.writeMicroseconds(motorStop);
+        rightMotor.writeMicroseconds(motorStop);
+
+        encoder_LeftMotor.zero();
+        encoder_RightMotor.zero();
+        break;
+      }
+
+    case 1:
+      {
+
+        break;
+      }
+
+    default: {
+
+      }
+  }
+
+  if ((millis() - ledMillis) > blinkInterval) {
+    ledMillis = millis();
+    digitalWrite(ledPin, ledState);
+    ledState != ledState;
+  }
 
 }
