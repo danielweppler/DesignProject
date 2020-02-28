@@ -2,6 +2,9 @@
 #ifndef DEFINIIONS_H
 #define DEFINIIONS_H
 
+//debug lines
+#define DEBUG_ENCODERS
+
 //libraries
 #include <Servo.h>
 #include <CharliePlexM.h>
@@ -26,7 +29,7 @@ const int middleUltrasonicPing = 4;
 const int middleUltrasonicData = 5;
 const int rightUltrasonicPing = 6;
 const int rightUltrasonicData = 7;
-const int modeButton = 7;
+const int modeButton = 6;
 const int rightMotorPin = 8;
 const int leftMotorPin = 9;
 const int liftMotorPin = 10;
@@ -36,10 +39,11 @@ const int ledPin = 13;
 //constant values like motor speeds/ positions
 const int motorSpeed = 1600;
 const int motorStop = 1500;
-const int leftOffset;
-const int rightOffset;
+const int leftOffset = 0;
+const int rightOffset = 0;
 
-const int blinkInterval=1000;
+
+const int blinkInterval = 1000;
 //
 
 //variables
@@ -47,13 +51,16 @@ unsigned long leftEchoTime;
 unsigned long middleEchoTime;
 unsigned long rightEchoTime;
 
-unsigned long ledMillis =0;
+unsigned int rightMotorSpeed;
+unsigned int leftMotorSpeed;
+
+unsigned long ledMillis = 0;
 bool ledState = true;
 
 //mode functionality
 bool buttonState;
 bool buttonPreviousState = false;
-int mode=0;
+int mode = 0;
 
 
 //headers

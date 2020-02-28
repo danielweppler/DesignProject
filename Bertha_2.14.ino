@@ -10,12 +10,12 @@ void setup() {
   pinMode(modeButton, INPUT_PULLUP);
 
   //ultrasonic setup
-  pinMode(leftUltrasonicPing, OUTPUT);
-  pinMode(leftUltrasonicData, INPUT);
-  pinMode(middleUltrasonicPing, OUTPUT);
-  pinMode(middleUltrasonicData, INPUT);
-  pinMode(rightUltrasonicPing, OUTPUT);
-  pinMode(rightUltrasonicData, INPUT);
+  //  pinMode(leftUltrasonicPing, OUTPUT);
+  //  pinMode(leftUltrasonicData, INPUT);
+  //  pinMode(middleUltrasonicPing, OUTPUT);
+  //  pinMode(middleUltrasonicData, INPUT);
+  //  pinMode(rightUltrasonicPing, OUTPUT);
+  //  pinMode(rightUltrasonicData, INPUT);
 
   //motor setup
   pinMode(rightMotorPin, OUTPUT);
@@ -66,12 +66,26 @@ void loop() {
 
     case 1:
       {
+        leftMotorSpeed  = motorSpeed + leftOffset;
+        rightMotorSpeed = motorSpeed + rightOffset;
+
+        leftMotor.writeMicroseconds(leftMotorSpeed);
+        rightMotor.writeMicroseconds(rightMotorSpeed);
+
+#ifdef DEBUG_ENCODERS
+
+        Serial.print("Encoders L: ");
+        Serial.print(encoder_LeftMotor.getRawPosition());
+        Serial.print(", R: ");
+        Serial.println(encoder_RightMotor.getRawPosition());
+#endif
 
         break;
       }
 
     default: {
-
+        leftMotor.writeMicroseconds(motorStop);
+        rightMotor.writeMicroseconds(motorStop);
       }
   }
 
