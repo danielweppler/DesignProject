@@ -5,6 +5,7 @@ void setup() {
 
   Wire.begin();
   Serial.begin(9600);
+  IRSerial.begin(2400);
 
   //mode button setup
   pinMode(modeButton, INPUT_PULLUP);
@@ -56,11 +57,17 @@ void loop() {
 
     case 0:
       {
+        irCheck(irInput); //gives irInput the value of the character being measured should be 0 and 5
         leftMotor.writeMicroseconds(motorStop);
         rightMotor.writeMicroseconds(motorStop);
 
         encoder_LeftMotor.zero();
         encoder_RightMotor.zero();
+
+        leftPing();
+        Serial.print("LeftEcho");
+        Serial.println(leftEchoTime);
+
         break;
       }
 
