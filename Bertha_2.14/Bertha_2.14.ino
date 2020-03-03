@@ -11,12 +11,12 @@ void setup() {
   pinMode(modeButton, INPUT_PULLUP);
 
   //ultrasonic setup
-  //  pinMode(leftUltrasonicPing, OUTPUT);
-  //  pinMode(leftUltrasonicData, INPUT);
-  //  pinMode(middleUltrasonicPing, OUTPUT);
-  //  pinMode(middleUltrasonicData, INPUT);
-  //  pinMode(rightUltrasonicPing, OUTPUT);
-  //  pinMode(rightUltrasonicData, INPUT);
+    pinMode(leftUltrasonicPing, OUTPUT);
+    pinMode(leftUltrasonicData, INPUT);
+    pinMode(middleUltrasonicPing, OUTPUT);
+    pinMode(middleUltrasonicData, INPUT);
+    pinMode(rightUltrasonicPing, OUTPUT);
+    pinMode(rightUltrasonicData, INPUT);
 
   //motor setup
   pinMode(rightMotorPin, OUTPUT);
@@ -57,20 +57,20 @@ void loop() {
 
     case 0:
       {
-        irCheck(irInput); //gives irInput the value of the character being measured should be 0 and 5
+   //     irCheck(irInput); //gives irInput the value of the character being measured should be 0 and 5
         leftMotor.writeMicroseconds(motorStop);
         rightMotor.writeMicroseconds(motorStop);
 
         encoder_LeftMotor.zero();
         encoder_RightMotor.zero();
 
-        leftPing();
-        Serial.print("LeftEcho");
-        Serial.println(leftEchoTime);
+    
+        rightPing();
+        Serial.print("RightEcho: ");
+        Serial.println(rightEchoTime/58);   
 
-        break;
+      break;
       }
-
     case 1:
       {
         leftMotorSpeed  = motorSpeed + leftOffset;
