@@ -7,7 +7,7 @@ double encoderCounts;
 double wheelBase=0.214;
 double wheelDiameter=0.102;
 
-encoderCounts = 629.2(wheelBase)(angle*3.14159265/180)/(2*3.14159265*wheelDiameter);
+encoderCounts = (629.2*wheelBase*angle*3.14159265/180)/(2*3.14159265*wheelDiameter);
 
 return encoderCounts;
 }

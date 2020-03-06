@@ -69,6 +69,9 @@ bool buttonState;
 bool buttonPreviousState = false;
 int mode = 0;
 
+//State functionality
+int currentState=0;
+
 //start delay
 bool startDelayed= false;
 int twoSecTimer;
@@ -97,5 +100,6 @@ PID rightPID(&rightInput, &rightOutput, &rightSetpoint, Kp, Ki, Kd, DIRECT);
 //HEADERS-------------
 #include "ping.h"
 #include "beaconSensing.h"
+#include "driveFunctions.h"
 
 #endif

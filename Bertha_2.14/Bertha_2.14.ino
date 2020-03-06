@@ -100,11 +100,6 @@ void loop() {
           leftPID.Compute();
           rightPID.Compute();
 
-          leftMotorSpeed = 1500 + leftOutput;
-          rightMotorSpeed = 1500 + rightOutput;
-
-          leftMotor.writeMicroseconds(leftMotorSpeed);
-          rightMotor.writeMicroseconds(rightMotorSpeed);
 
 #ifdef DEBUG_ENCODERS
 
@@ -126,42 +121,124 @@ void loop() {
             didOnce = true;
             leftStartCount = encoder_LeftMotor.getRawPosition();
             rightStartCount = encoder_RightMotor.getRawPosition();
+
+            leftPID.SetTunings(turnKp, turnKi, turnKd);
+            rightPID.SetTunings(turnKp, turnKi, turnKd);
           }
 
           leftInput = encoder_LeftMotor.getRawPosition();
           rightInput = encoder_RightMotor.getRawPosition();
 
-          leftPID.SetOutputLimits(-100, 100);
-          rightPID.SetOutputLimits(-100, 100);
+          switch (currentState) {
 
-          leftPID.SetTunings(turnKp, turnKi, turnKd);
-          rightPID.SetTunings(turnKp, turnKi, turnKd);
+            case 0: {
 
-          leftSetPoint = leftStartCount - turnCalc(90);
-          rightSetpoint = leftStartCount + turnCalc(90);
+                irCheck(); //start checking for ir signal
 
-          leftPID.Compute();
-          rightPID.Compute();
+                leftPID.SetOutputLimits(-100, 100);
+                rightPID.SetOutputLimits(-100, 100);
+
+                if (irInput == 5) {        //if its the correct signal update state
+                  
+                  didOnce = false;
+                  currentState++;
+                  
+                }
+                
+                else {
+                                      
+                    rightSetpoint = rightStartCount + turnCalc(90);
+                    leftSetpoint = leftStartCount - turnCalc(90);     //first turn 90 degrees left
+
+                    leftPID.Compute();
+                    rightPID.Compute();
+
+                    if (leftInput < (leftStartCount - turnCalc(90))) {
+
+                      currentState++;
+                    
+                    }
+                  
+                }
+                break;
+              }
+
+            case 1: { //here because we saw the signal OR turned left 90
+
+
+                if (!didOnce) {
+                  didOnce = true;
+
+                  leftStartCount = encoder_LeftMotor.getRawPosition();    //get new positions (after turning to find beacon)
+                  rightStartCount = encoder_RightMotor.getRawPosition();
+
+                  leftPID.SetTunings(turnKp, turnKi, turnKd);
+                  rightPID.SetTunings(turnKp, turnKi, turnKd);
+                }
+
+                irCheck(); //keep looking for signal
+
+                leftPID.SetOutputLimits(-100, 100);
+                rightPID.SetOutputLimits(-100, 100);
+
+                 if (irInput == 5) {        //if its the correct signal update state
+                  
+                  didOnce = false;
+                  currentState++;
+                  
+                }
+
+                else {
+
+                  rightSetpoint = rightStartCount - turnCalc(90);
+                  leftSetpoint = leftStartCount + turnCalc(90);     //now turn 90 degrees right
+
+                  leftPID.Compute();
+                  rightPID.Compute();
+
+                  if (rightInput < (rightStartCount - turnCalc(90))) {
+
+                    currentState++;
+                    
+                  }
+                }
+
+                break;
+
+            }
+
+            case 2: {
+
+              
+                            
+            }
+
+        }
+
+        leftMotorSpeed = 1500 + leftOutput;
+        rightMotorSpeed = 1500 + rightOutput;
+
+        leftMotor.writeMicroseconds(leftMotorSpeed);
+        rightMotor.writeMicroseconds(rightMotorSpeed);
+
         }
 
 
-
-
-
-        break;
-      }
-
-    default: {
-
-        leftMotor.writeMicroseconds(motorStop);
-        rightMotor.writeMicroseconds(motorStop);
-      }
-
-
-      if ((millis() - ledMillis) > blinkInterval) {
-        ledMillis = millis();
-        digitalWrite(ledPin, ledState);
-        ledState != ledState;
-      }
-
+      break;
   }
+
+default: {
+
+    leftMotor.writeMicroseconds(motorStop);
+    rightMotor.writeMicroseconds(motorStop);
+  }
+
+
+  if ((millis() - ledMillis) > blinkInterval) {
+    ledMillis = millis();
+    digitalWrite(ledPin, ledState);
+    ledState != ledState;
+  }
+
+}
+
