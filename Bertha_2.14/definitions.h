@@ -54,6 +54,7 @@ unsigned int leftMotorSpeed;
 //pid
 double leftSetpoint, leftInput, leftOutput;
 double Kp = 1.01, Ki = 0.02, Kd = 0.115;
+double turnKp = 1.4, turnKi = 0.2, turnKd = 0.2;
 double rightSetpoint, rightInput, rightOutput;
 
 //led

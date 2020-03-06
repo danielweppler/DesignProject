@@ -38,6 +38,8 @@ void setup() {
   leftPID.SetMode(AUTOMATIC);
   rightPID.SetMode(AUTOMATIC);
 
+  leftPID.SetSampleTime(100);
+
 }
 
 void loop() {
@@ -123,11 +125,23 @@ void loop() {
           if (!didOnce) {
             didOnce = true;
             leftStartCount = encoder_LeftMotor.getRawPosition();
-            rightStartCount = encoder_RightMotor.getRawPosition(); 
+            rightStartCount = encoder_RightMotor.getRawPosition();
           }
-          
+
           leftInput = encoder_LeftMotor.getRawPosition();
           rightInput = encoder_RightMotor.getRawPosition();
+
+          leftPID.SetOutputLimits(-100, 100);
+          rightPID.SetOutputLimits(-100, 100);
+
+          leftPID.SetTunings(turnKp, turnKi, turnKd);
+          rightPID.SetTunings(turnKp, turnKi, turnKd);
+
+          leftSetPoint = leftStartCount - turnCalc(90);
+          rightSetpoint = leftStartCount + turnCalc(90);
+
+          leftPID.Compute();
+          rightPID.Compute();
         }
 
 
