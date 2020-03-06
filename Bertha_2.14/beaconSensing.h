@@ -1,10 +1,10 @@
 #ifndef BEACONSENSING_H
 #define BEACONSENSING_H
 
-void irCheck (char * irChar){
+void irCheck (){
   if (IRSerial.available())
   {
-    *irChar = IRSerial.read();
+    irInput = IRSerial.read();
   }
   } 
 
