@@ -28,7 +28,7 @@ const int liftMotorPin = 10;
 const int winchMotorPin = 11;
 const int ledPin = 13;
 const int irPin = A3;
-const int notUsed=12;
+const int notUsed = 12;
 
 
 
@@ -70,16 +70,25 @@ bool buttonPreviousState = false;
 int mode = 0;
 
 //State functionality
-int currentState=0;
+int currentState = 0;
 
 //start delay
-bool startDelayed= false;
+bool startDelayed = false;
 int twoSecTimer;
 
 //case based initialization stuff
 bool didOnce = false;
-unsigned long leftStartCount=0;
-unsigned long rightStartCount=0;
+bool onlyDidOnce = false;//used for other purpose
+unsigned long leftStartCount = 0;
+unsigned long rightStartCount = 0;
+
+//box variables
+double initialFrontDist;
+double secondFrontDist;
+double thirdFrontDist;
+
+int distFromLeftWall;
+
 
 //objects
 Servo rightMotor;
