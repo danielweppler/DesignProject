@@ -3,7 +3,7 @@
 #define DEFINIIONS_H
 
 //debug lines
-//#define DEBUG_ENCODERS
+#define DEBUG_ENCODERS
 
 //libraries
 #include <Servo.h>
@@ -40,7 +40,7 @@ const int leftOffset = 0;
 const int rightOffset = 0;
 const int countsPerRev = 627.2;
 const int revs = 5;
-const int blinkInterval = 1000;
+const int blinkInterval = 100;
 
 
 //VARIABLES------------------

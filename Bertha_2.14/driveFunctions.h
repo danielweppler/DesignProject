@@ -5,7 +5,7 @@ double turnCalc (int angle) {
   
 double encoderCounts;
 double wheelBase=0.214;
-double wheelDiameter=0.102;
+double wheelDiameter=0.05;
 
 encoderCounts = (countsPerRev*wheelBase*angle*3.14159265/180)/(2*3.14159265*wheelDiameter);
 

@@ -4,6 +4,8 @@
 
 void leftPing() {
 
+  digitalWrite(leftUltrasonicPing, LOW);
+  delayMicroseconds(5);  //The 10 microsecond pause where the pulse in "high"
   digitalWrite(leftUltrasonicPing, HIGH);
   delayMicroseconds(10);  //The 10 microsecond pause where the pulse in "high"
   digitalWrite(leftUltrasonicPing, LOW);
@@ -13,7 +15,8 @@ void leftPing() {
 }
 
 void middlePing() {
-
+  digitalWrite(leftUltrasonicPing, LOW);
+  delayMicroseconds(5);  //The 10 microsecond pause where the pulse in "high"
   digitalWrite(middleUltrasonicPing, HIGH);
   delayMicroseconds(10);  //The 10 microsecond pause where the pulse in "high"
   digitalWrite(middleUltrasonicPing, LOW);
@@ -23,7 +26,8 @@ void middlePing() {
 }
 
 void rightPing() {
-
+  digitalWrite(leftUltrasonicPing, LOW);
+  delayMicroseconds(5);  //The 10 microsecond pause where the pulse in "high"
   digitalWrite(rightUltrasonicPing, HIGH);
   delayMicroseconds(10);  //The 10 microsecond pause where the pulse in "high"
   digitalWrite(rightUltrasonicPing, LOW);

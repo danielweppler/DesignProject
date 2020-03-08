@@ -80,9 +80,12 @@ void loop() {
         encoder_LeftMotor.zero();
         encoder_RightMotor.zero();
 
-        //        leftPing();
-        //        Serial.print("LeftEcho");
-        //        Serial.println(leftEchoTime);
+        if ((millis() - ledMillis) > blinkInterval) {
+          ledMillis = millis();
+          middlePing();
+          Serial.print("middleEcho: ");
+          Serial.println(middleEchoTime / 58);
+        }
 
         break;
       }
@@ -92,6 +95,12 @@ void loop() {
     case 1:// just drive straight bro
       {
         if (startDelayed) {
+
+          //uncomment to test turning
+
+          //          leftPID.SetTunings(turnKp, turnKi, turnKd);
+          //          rightPID.SetTunings(turnKp, turnKi, turnKd);
+
           leftInput = encoder_LeftMotor.getRawPosition();
           rightInput = encoder_RightMotor.getRawPosition();
 
@@ -555,7 +564,7 @@ void loop() {
                   rightStartCount = encoder_RightMotor.getRawPosition();
 
                   //find forward distance
-                   middlePing();
+                  middlePing();
                   thirdFrontDist = middleEchoTime / 58;
 
                   //go forward measured ultrasonic distance plus 5 more to be sure
