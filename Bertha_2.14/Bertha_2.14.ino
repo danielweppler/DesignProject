@@ -444,7 +444,8 @@ void loop() {
                   rightStartCount = encoder_RightMotor.getRawPosition();
 
                   //find forward distance
-                  secondFrontDist = middlePing() / 58;
+                  middlePing();
+                  secondFrontDist = middleEchoTime / 58;
 
                   //set target of PID as halfway of forward direction
                   leftSetpoint = leftStartCount + distanceCalc(secondFrontDist / 2);
@@ -554,7 +555,8 @@ void loop() {
                   rightStartCount = encoder_RightMotor.getRawPosition();
 
                   //find forward distance
-                  thirdFrontDist = middlePing() / 58;
+                   middlePing();
+                  thirdFrontDist = middleEchoTime / 58;
 
                   //go forward measured ultrasonic distance plus 5 more to be sure
                   leftSetpoint = leftStartCount + distanceCalc(thirdFrontDist + 10);
@@ -587,7 +589,7 @@ void loop() {
 
                 //if the bot isnt pointing in the right direction go back to last case and find it again
                 //as long as bot isnt too close (30 cm)
-                if (irInput != 5 && (middleEchoTime / 58) > 30)) {
+                if (irInput != 5 && (middleEchoTime / 58) > 30) {
                   currentState = 3;
                   didOnce = false;
                   leftMotorSpeed = 1500;
