@@ -27,7 +27,7 @@ const int leftMotorPin = 9;
 const int liftMotorPin = 10;
 const int winchMotorPin = 11;
 const int ledPin = 13;
-const int irPin = A3;
+const int irPin = A0;
 const int notUsed = 12;
 
 
@@ -40,13 +40,14 @@ const int leftOffset = 0;
 const int rightOffset = 0;
 const int countsPerRev = 627.2;
 const int revs = 5;
-const int blinkInterval = 100;
+const int blinkInterval = 500;
 
 
 //VARIABLES------------------
 
 unsigned long leftEchoTime;
 unsigned long middleEchoTime;
+unsigned long middleTempTime;
 unsigned long rightEchoTime;
 unsigned int rightMotorSpeed;
 unsigned int leftMotorSpeed;

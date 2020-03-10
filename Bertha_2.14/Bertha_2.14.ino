@@ -1,4 +1,4 @@
-//definitions
+ //definitions
 #include "definitions.h"
 
 void setup() {
@@ -83,6 +83,8 @@ void loop() {
         if ((millis() - ledMillis) > blinkInterval) {
           ledMillis = millis();
           middlePing();
+          Serial.print("input read:    ");
+          Serial.println(irInput);
           Serial.print("middleEcho: ");
           Serial.println(middleEchoTime / 58);
         }
@@ -258,25 +260,28 @@ void loop() {
 
           switch (currentState) {
 
-            case 0: {
+            case 0://spin around a few times until IR sensor is read
+              {
 
                 if (!didOnce) {
                   didOnce = true;
-                  //set target of PID as half of the box
-                  leftSetpoint = distanceCalc(initialFrontDist / 2);
-                  rightSetpoint = distanceCalc(initialFrontDist / 2);
 
-                  //setting speeds
-                  leftPID.SetOutputLimits(-450, 450);
-                  rightPID.SetOutputLimits(-450, 450);
+                  //stores starting encoder position for this state
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
+
+                  //set target of PID as 1080 degrees to the right
+                  leftSetpoint = leftStartCount + turnCalc(1080);
+                  rightSetpoint = rightStartCount - turnCalc(1080);
+
+                  //setting speeds (make this smaller to spin slower, might have to tune turnPID values but maybe not, if needed try reducing turnKd by increments of 0.02)
+                  leftPID.SetOutputLimits(-150, 150);
+                  rightPID.SetOutputLimits(-150, 150);
 
                   //setting the tuning for PID
-                  leftPID.SetTunings(Kp, Ki, Kd);
-                  rightPID.SetTunings(Kp, Ki, Kd);
+                  leftPID.SetTunings(turnKp, turnKi, turnKd);
+                  rightPID.SetTunings(turnKp, turnKi, turnKd);
                 }
-
-                //updates middleUltrasonic
-                middlePing();
 
                 //reads updated encoder values
                 leftInput = encoder_LeftMotor.getRawPosition();
@@ -290,10 +295,11 @@ void loop() {
                 leftMotorSpeed = 1500 + leftOutput;
                 rightMotorSpeed = 1500 + rightOutput;
 
+                //update IR values
+                irCheck();
 
-
-                //if front distance is +- 5 cm from the half way mark of the track
-                if (  (middleEchoTime / 58) >= ((initialFrontDist / 2) - 5) && (middleEchoTime / 58) <= ((initialFrontDist / 2) + 5) ) {
+                //increments states when IR is found
+                if (irInput == '5' ||irInput == '0' || irInput == 53 ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -304,11 +310,8 @@ void loop() {
                 leftMotor.writeMicroseconds(leftMotorSpeed);
                 rightMotor.writeMicroseconds(rightMotorSpeed);
 
-
                 break;
               }
-
-
 
 
             default:
@@ -539,7 +542,7 @@ void loop() {
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == 5) {
+                if (irInput == 53 ||irInput == 48) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -624,9 +627,6 @@ void loop() {
 
                 break;
               }
-
-
-
 
 
             default://for state switch
