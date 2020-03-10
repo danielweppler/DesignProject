@@ -1,4 +1,4 @@
- //definitions
+//definitions
 #include "definitions.h"
 
 void setup() {
@@ -275,8 +275,8 @@ void loop() {
                   rightSetpoint = rightStartCount - turnCalc(1080);
 
                   //setting speeds (make this smaller to spin slower, might have to tune turnPID values but maybe not, if needed try reducing turnKd by increments of 0.02)
-                  leftPID.SetOutputLimits(-150, 150);
-                  rightPID.SetOutputLimits(-150, 150);
+                  leftPID.SetOutputLimits(-100, 100);
+                  rightPID.SetOutputLimits(-100, 100);
 
                   //setting the tuning for PID
                   leftPID.SetTunings(turnKp, turnKi, turnKd);
@@ -299,7 +299,7 @@ void loop() {
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == '5' ||irInput == '0' || irInput == 53 ) {
+                if (irInput == '5' || irInput == '0' || irInput == 53 ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -351,8 +351,8 @@ void loop() {
                 if (!didOnce) {
                   didOnce = true;
                   //set target of PID as half of the box
-                  leftSetpoint = distanceCalc(initialFrontDist / 2);
-                  rightSetpoint = distanceCalc(initialFrontDist / 2);
+                  leftSetpoint = distanceCalc(110);
+                  rightSetpoint = distanceCalc(110);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-450, 450);
@@ -381,7 +381,14 @@ void loop() {
 
 
                 //if front distance is +- 5 cm from the half way mark of the track
-                if ( (middleEchoTime / 58) >= ((initialFrontDist / 2) - 5) && (middleEchoTime / 58) <= ((initialFrontDist / 2) + 5) ) {
+                //                if ( (middleEchoTime / 58) >= ((initialFrontDist / 2) - 5) && (middleEchoTime / 58) <= ((initialFrontDist / 2) + 5) ) {
+                //                  currentState++;
+                //                  didOnce = false;
+                //                  leftMotorSpeed = 1500;
+                //                  rightMotorSpeed = 1500;
+                //                }
+
+                if ( (leftInput) >= (leftSetpoint - distanceCalc(2)) && (leftInput) <= (leftSetpoint + distanceCalc(2)) ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -410,8 +417,8 @@ void loop() {
                   rightSetpoint = rightStartCount - turnCalc(90);
 
                   //setting speeds
-                  leftPID.SetOutputLimits(-150, 150);
-                  rightPID.SetOutputLimits(-150, 150);
+                  leftPID.SetOutputLimits(-100, 100);
+                  rightPID.SetOutputLimits(-100, 100);
 
                   //setting the tuning for PID
                   leftPID.SetTunings(turnKp, turnKi, turnKd);
@@ -460,8 +467,8 @@ void loop() {
                   secondFrontDist = middleEchoTime / 58;
 
                   //set target of PID as halfway of forward direction
-                  leftSetpoint = leftStartCount + distanceCalc(secondFrontDist / 2);
-                  rightSetpoint = leftStartCount + distanceCalc(secondFrontDist / 2);
+                  leftSetpoint = leftStartCount + distanceCalc(120);
+                  rightSetpoint = leftStartCount + distanceCalc(120);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-450, 450);
@@ -488,7 +495,14 @@ void loop() {
                 rightMotorSpeed = 1500 + rightOutput;
 
                 //if front distance is +- 5 cm from the half way mark of the forward distance
-                if ( (middleEchoTime / 58) >= ((secondFrontDist / 2) - 5) && (middleEchoTime / 58) <= ((secondFrontDist / 2) + 5) ) {
+                //                if ( (middleEchoTime / 58) >= ((secondFrontDist / 2) - 5) && (middleEchoTime / 58) <= ((secondFrontDist / 2) + 5) ) {
+                //                  currentState++;
+                //                  didOnce = false;
+                //                  leftMotorSpeed = 1500;
+                //                  rightMotorSpeed = 1500;
+                //                }
+
+                if ( (leftInput) >= (leftSetpoint - distanceCalc(2)) && (leftInput) <= (leftSetpoint + distanceCalc(2)) ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -518,8 +532,8 @@ void loop() {
                   rightSetpoint = rightStartCount - turnCalc(1080);
 
                   //setting speeds (make this smaller to spin slower, might have to tune turnPID values but maybe not, if needed try reducing turnKd by increments of 0.02)
-                  leftPID.SetOutputLimits(-150, 150);
-                  rightPID.SetOutputLimits(-150, 150);
+                  leftPID.SetOutputLimits(-100, 100);
+                  rightPID.SetOutputLimits(-100, 100);
 
                   //setting the tuning for PID
                   leftPID.SetTunings(turnKp, turnKi, turnKd);
@@ -542,7 +556,7 @@ void loop() {
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == 53 ||irInput == 48) {
+                if (irInput == '5' || irInput == '0' || irInput == 53 ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -601,19 +615,23 @@ void loop() {
 
                 //if the bot isnt pointing in the right direction go back to last case and find it again
                 //as long as bot isnt too close (30 cm)
-                if (irInput != 5 && (middleEchoTime / 58) > 30) {
-                  currentState = 3;
-                  didOnce = false;
-                  leftMotorSpeed = 1500;
-                  rightMotorSpeed = 1500;
-                }
+                
+//                if (irInput != 53 && (middleEchoTime / 58) > 30) {
+//                  currentState = 3;
+//                  didOnce = false;
+//                  leftMotorSpeed = 1500;
+//                  rightMotorSpeed = 1500;
+//                }
+
                 //if its not seeing it and its closer than 30 just do normal stuff
-                else if (irInput != 5 && (middleEchoTime / 58) < 30 && (middleEchoTime / 58) > 5) {
+                if (irInput != 53 && (middleEchoTime / 58) < 30 && (middleEchoTime / 58) > 5) {
                   //nothing should be in here
                 }
 
                 //if beacon is off and front distance is +- 5 cm from the targeted distance (should still be more than enough in theory)
-                else if ( irInput != 5 && (leftInput) >= (leftSetpoint - distanceCalc(5)) && (leftInput) <= (leftSetpoint + distanceCalc(5)) ) {
+               // else if ( irInput != 53 && (leftInput) >= (leftSetpoint - distanceCalc(5)) && (leftInput) <= (leftSetpoint + distanceCalc(5)) ) {
+
+               else if(irInput !=53 && middleEchoTime/58<6 ){
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
