@@ -3,7 +3,8 @@
 #define DEFINIIONS_H
 
 //debug lines
-#define DEBUG_ENCODERS
+//#define DEBUG_ENCODERS
+//#define DEBUG_IRANDULTRASONIC
 
 //libraries
 #include <Servo.h>
@@ -51,6 +52,8 @@ unsigned long middleTempTime;
 unsigned long rightEchoTime;
 unsigned int rightMotorSpeed;
 unsigned int leftMotorSpeed;
+//other delay
+unsigned long beaconDelay = 0;
 
 //pid
 double leftSetpoint, leftInput, leftOutput;
@@ -87,8 +90,14 @@ unsigned long rightStartCount = 0;
 double initialFrontDist;
 double secondFrontDist;
 double thirdFrontDist;
+//int distFromLeftWall;
 
-int distFromLeftWall;
+//orientation Variables
+double leftTurned = 0;
+double rightTurned = 0;
+
+double lastLeftStartCount = 0;
+double lastRightStartCount = 0;
 
 
 //objects
