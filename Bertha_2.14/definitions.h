@@ -4,7 +4,7 @@
 
 //debug lines
 //#define DEBUG_ENCODERS
-//#define DEBUG_IRANDULTRASONIC
+#define DEBUG_IRANDULTRASONIC
 
 //libraries
 #include <Servo.h>

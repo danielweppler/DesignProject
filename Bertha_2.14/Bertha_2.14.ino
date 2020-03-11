@@ -260,7 +260,7 @@ void loop() {
 
           switch (currentState) {
 
-             case 0://spin around a few times until IR sensor is read
+            case 0://spin around a few times until IR sensor is read
               {
 
                 if (!didOnce) {
@@ -300,6 +300,7 @@ void loop() {
 
                 //increments states when IR is found
                 if (irInput == '5' || irInput == '0' || irInput == 53 ) {
+
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -309,15 +310,20 @@ void loop() {
                   leftTurned = leftInput - leftStartCount;
                   rightTurned = rightInput - rightStartCount;
 
+                  leftMotor.writeMicroseconds(1500);
+                  rightMotor.writeMicroseconds(1500);
+
                   if (rightTurned > turnCalc(360) && leftTurned > turnCalc(360)) {
                     rightTurned -= turnCalc(360);
                     leftTurned -= turnCalc(360);
                   }
                 }
+                else {
 
-                // send the speeds to the motors
-                leftMotor.writeMicroseconds(leftMotorSpeed);
-                rightMotor.writeMicroseconds(rightMotorSpeed);
+                  // send the speeds to the motors
+                  leftMotor.writeMicroseconds(leftMotorSpeed);
+                  rightMotor.writeMicroseconds(rightMotorSpeed);
+                }
 
                 break;
               }
@@ -329,7 +335,7 @@ void loop() {
                 middlePing();
 
                 //just chills for 1.5 seconds hopeing US values arent trash
-                if (!didOnce && (millis() - beaconDelay) > 1500) {
+                if (!didOnce) {
 
                   //stores starting encoder position for this state
                   leftStartCount = encoder_LeftMotor.getRawPosition();
@@ -353,49 +359,32 @@ void loop() {
                   didOnce = true;
                 }
 
-                //only do this after top part is excecuted
-                else {
+                //reads updated encoder values
+                leftInput = encoder_LeftMotor.getRawPosition();
+                rightInput = encoder_RightMotor.getRawPosition();
 
-                  //reads updated encoder values
-                  leftInput = encoder_LeftMotor.getRawPosition();
-                  rightInput = encoder_RightMotor.getRawPosition();
+                //PID library does math
+                leftPID.Compute();
+                rightPID.Compute();
 
-                  //PID library does math
-                  leftPID.Compute();
-                  rightPID.Compute();
-
-                  //left and right motor speed from PID
-                  leftMotorSpeed = 1500 + leftOutput;
-                  rightMotorSpeed = 1500 + rightOutput;
+                //left and right motor speed from PID
+                leftMotorSpeed = 1500 + leftOutput;
+                rightMotorSpeed = 1500 + rightOutput;
 
 
-                  //if the bot isnt pointing in the right direction go back to last case and find it again
-                  //as long as bot isnt too close (30 cm)
-
-                  //                if (irInput != 53 && (middleEchoTime / 58) > 30) {
-                  //                  currentState = 3;
-                  //                  didOnce = false;
-                  //                  leftMotorSpeed = 1500;
-                  //                  rightMotorSpeed = 1500;
-                  //                }
-
-
-                  //if beacon is off and front distance is +- 5 cm from the targeted distance (should still be more than enough in theory)
-                  // else if ( irInput != 53 && (leftInput) >= (leftSetpoint - distanceCalc(5)) && (leftInput) <= (leftSetpoint + distanceCalc(5)) ) {
-
-                  else if (irInput != 53 && middleEchoTime / 58 < 6 ) {
-                    currentState++;
-                    didOnce = false;
-                    leftMotorSpeed = 1500;
-                    rightMotorSpeed = 1500;
-                    lastLeftStartCount = leftStartCount;
-                    lastRightStartCount = rightStartCount;
-                  }
-
+                if (irInput != 53 && middleEchoTime / 58 < 6 ) {
+                  currentState++;
+                  didOnce = false;
+                  leftMotorSpeed = 1500;
+                  rightMotorSpeed = 1500;
+                  lastLeftStartCount = leftStartCount;
+                  lastRightStartCount = rightStartCount;
                 }
                 // send the speeds to the motors
                 leftMotor.writeMicroseconds(leftMotorSpeed);
                 rightMotor.writeMicroseconds(rightMotorSpeed);
+
+
 
                 break;
               }
@@ -460,8 +449,8 @@ void loop() {
                   rightStartCount = encoder_RightMotor.getRawPosition();
 
                   //turn around about perpendicular to the bridge
-                  leftSetpoint = leftStartCount-leftTurned+turnCalc(180);
-                  rightSetpoint = rightStartCount+rightTurned-turnCalc(180);
+                  leftSetpoint = leftStartCount - leftTurned + turnCalc(180);
+                  rightSetpoint = rightStartCount + rightTurned - turnCalc(180);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-150, 150);
@@ -484,7 +473,7 @@ void loop() {
                 leftMotorSpeed = 1500 + leftOutput;
                 rightMotorSpeed = 1500 + rightOutput;
 
-                //if rotated +- 1 target degrees, increment state 
+                //if rotated +- 1 target degrees, increment state
                 if ( (leftInput) >= (leftSetpoint - turnCalc(1)) && (leftInput) <= (leftSetpoint + turnCalc(1)) ) {
                   currentState++;
                   didOnce = false;
@@ -742,7 +731,7 @@ void loop() {
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == '5' || irInput == '0' || irInput == 53 ) {
+                if (irInput == '5' || irInput == '0' || irInput == 48 || irInput == 53) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -826,7 +815,7 @@ void loop() {
                   //if beacon is off and front distance is +- 5 cm from the targeted distance (should still be more than enough in theory)
                   // else if ( irInput != 53 && (leftInput) >= (leftSetpoint - distanceCalc(5)) && (leftInput) <= (leftSetpoint + distanceCalc(5)) ) {
 
-                  else if (irInput != 53 && middleEchoTime / 58 < 6 ) {
+                  if (irInput != 53 && middleEchoTime / 58 < 6 ) {
                     currentState++;
                     didOnce = false;
                     leftMotorSpeed = 1500;
@@ -903,8 +892,8 @@ void loop() {
                   rightStartCount = encoder_RightMotor.getRawPosition();
 
                   //turn around about perpendicular to the bridge
-                  leftSetpoint = leftStartCount-leftTurned+turnCalc(180);
-                  rightSetpoint = rightStartCount+rightTurned-turnCalc(180);
+                  leftSetpoint = leftStartCount - leftTurned + turnCalc(180);
+                  rightSetpoint = rightStartCount + rightTurned - turnCalc(180);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-150, 150);
@@ -927,7 +916,7 @@ void loop() {
                 leftMotorSpeed = 1500 + leftOutput;
                 rightMotorSpeed = 1500 + rightOutput;
 
-                //if rotated +- 1 target degrees, increment state 
+                //if rotated +- 1 target degrees, increment state
                 if ( (leftInput) >= (leftSetpoint - turnCalc(1)) && (leftInput) <= (leftSetpoint + turnCalc(1)) ) {
                   currentState++;
                   didOnce = false;
