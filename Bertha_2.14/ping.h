@@ -24,9 +24,16 @@ void middlePing() {
 
   middleTempTime = pulseIn(middleUltrasonicData, HIGH, 25000);
 
-  if(middleTempTime >20){
+  if (middleTempTime > 20) {
     middleEchoTime = middleTempTime;
-    }
+  }
+
+#ifdef DEBUG_IRANDULTRASONIC
+  Serial.print("input read:    ");
+  Serial.println(irInput);
+  Serial.print("Middle dist:");
+  Serial.println(middleEchoTime / 58);
+#endif
 
 
 }

@@ -4,7 +4,7 @@
 
 //debug lines
 //#define DEBUG_ENCODERS
-#define DEBUG_IRANDULTRASONIC
+//#define DEBUG_IRANDULTRASONIC
 
 //libraries
 #include <Servo.h>
@@ -83,8 +83,8 @@ int twoSecTimer;
 //case based initialization stuff
 bool didOnce = false;
 bool onlyDidOnce = false;//used for other purpose
-unsigned long leftStartCount = 0;
-unsigned long rightStartCount = 0;
+double leftStartCount = 0;
+double rightStartCount = 0;
 
 //box variables
 double initialFrontDist;

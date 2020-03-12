@@ -275,8 +275,8 @@ void loop() {
                   rightSetpoint = rightStartCount - turnCalc(1080);
 
                   //setting speeds (make this smaller to spin slower, might have to tune turnPID values but maybe not, if needed try reducing turnKd by increments of 0.02)
-                  leftPID.SetOutputLimits(-100, 100);
-                  rightPID.SetOutputLimits(-100, 100);
+                  leftPID.SetOutputLimits(-75, 75);
+                  rightPID.SetOutputLimits(-75, 75);
 
                   //setting the tuning for PID
                   leftPID.SetTunings(turnKp, turnKi, turnKd);
@@ -295,11 +295,26 @@ void loop() {
                 leftMotorSpeed = 1500 + leftOutput;
                 rightMotorSpeed = 1500 + rightOutput;
 
+
+                //                if((millis()-ledMillis)>500){
+                //                ledMillis = millis();
+                //
+                //                Serial.print("leftSetPoint ");
+                //                Serial.print(leftSetpoint);
+                //                Serial.print("rightSetPoint ");
+                //                Serial.println(rightSetpoint);
+                //                Serial.print("leftInput ");
+                //                Serial.print(leftInput);
+                //                Serial.print("rightInput ");
+                //                Serial.println(rightInput);
+                //                Serial.print("\n\n");
+                //                }
+                //
                 //update IR values
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == '5' || irInput == '0' || irInput == 53 ) {
+                if (irInput == '5' || irInput == '0' ||  irInput == 48  ) {
 
                   currentState++;
                   didOnce = false;
@@ -312,6 +327,9 @@ void loop() {
 
                   leftMotor.writeMicroseconds(1500);
                   rightMotor.writeMicroseconds(1500);
+
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
 
                   if (rightTurned > turnCalc(360) && leftTurned > turnCalc(360)) {
                     rightTurned -= turnCalc(360);
@@ -334,8 +352,14 @@ void loop() {
                 //updates front distance
                 middlePing();
 
-                //just chills for 1.5 seconds hopeing US values arent trash
+                //
+                irCheck();
+
+                //just chills for 1.5 seconds hoping US values arent trash
                 if (!didOnce) {
+                  Serial.print("\n\n ");
+                  Serial.println("--------newCase----------");
+                  Serial.print("\n\n");
 
                   //stores starting encoder position for this state
                   leftStartCount = encoder_LeftMotor.getRawPosition();
@@ -345,8 +369,8 @@ void loop() {
                   thirdFrontDist = middleEchoTime / 58;
 
                   //go forward measured ultrasonic distance plus 5 more to be sure
-                  leftSetpoint = leftStartCount + distanceCalc(thirdFrontDist + 10);
-                  rightSetpoint = rightStartCount + distanceCalc(thirdFrontDist + 10);
+                  leftSetpoint = leftStartCount + distanceCalc(600);
+                  rightSetpoint = rightStartCount + distanceCalc(600);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-450, 450);
@@ -372,17 +396,42 @@ void loop() {
                 rightMotorSpeed = 1500 + rightOutput;
 
 
-                if (irInput != 53 && middleEchoTime / 58 < 6 ) {
+                //                if((millis()-ledMillis)>500){
+                //                ledMillis = millis();
+                //
+                //                Serial.print("leftSetPoint ");
+                //                Serial.print(leftSetpoint);
+                //                Serial.print("rightSetPoint ");
+                //                Serial.println(rightSetpoint);
+                //                Serial.print("leftInput ");
+                //                Serial.print(leftInput);
+                //                Serial.print("rightInput ");
+                //                Serial.println(rightInput);
+                //                Serial.print("\n\n");
+                //                }
+
+
+
+
+
+                if (irInput != 53 && irInput != 48 && middleEchoTime / 58 < 6 ) {
+                  Serial.print("\n\n ");
+                  Serial.println("--------newCase----------");
+                  Serial.print("\n\n");
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
                   rightMotorSpeed = 1500;
                   lastLeftStartCount = leftStartCount;
                   lastRightStartCount = rightStartCount;
+                  leftMotor.writeMicroseconds(1500);
+                  rightMotor.writeMicroseconds(1500);
                 }
-                // send the speeds to the motors
-                leftMotor.writeMicroseconds(leftMotorSpeed);
-                rightMotor.writeMicroseconds(rightMotorSpeed);
+                else {
+                  // send the speeds to the motors
+                  leftMotor.writeMicroseconds(leftMotorSpeed);
+                  rightMotor.writeMicroseconds(rightMotorSpeed);
+                }
 
 
 
@@ -526,8 +575,8 @@ void loop() {
                 if (!didOnce) {
                   didOnce = true;
                   //set target of PID as half of the box
-                  leftSetpoint = distanceCalc(110);
-                  rightSetpoint = distanceCalc(110);
+                  leftSetpoint = distanceCalc(125);
+                  rightSetpoint = distanceCalc(125);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-450, 450);
@@ -707,8 +756,8 @@ void loop() {
                   rightSetpoint = rightStartCount - turnCalc(1080);
 
                   //setting speeds (make this smaller to spin slower, might have to tune turnPID values but maybe not, if needed try reducing turnKd by increments of 0.02)
-                  leftPID.SetOutputLimits(-100, 100);
-                  rightPID.SetOutputLimits(-100, 100);
+                  leftPID.SetOutputLimits(-75, 75);
+                  rightPID.SetOutputLimits(-75, 75);
 
                   //setting the tuning for PID
                   leftPID.SetTunings(turnKp, turnKi, turnKd);
@@ -727,29 +776,53 @@ void loop() {
                 leftMotorSpeed = 1500 + leftOutput;
                 rightMotorSpeed = 1500 + rightOutput;
 
+
+                //                if((millis()-ledMillis)>500){
+                //                ledMillis = millis();
+                //
+                //                Serial.print("leftSetPoint ");
+                //                Serial.print(leftSetpoint);
+                //                Serial.print("rightSetPoint ");
+                //                Serial.println(rightSetpoint);
+                //                Serial.print("leftInput ");
+                //                Serial.print(leftInput);
+                //                Serial.print("rightInput ");
+                //                Serial.println(rightInput);
+                //                Serial.print("\n\n");
+                //                }
+                //
                 //update IR values
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == '5' || irInput == '0' || irInput == 48 || irInput == 53) {
+                if (irInput == '0' || irInput == 48  ) {
+
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
                   rightMotorSpeed = 1500;
                   beaconDelay = millis();
 
-                  leftTurned = leftInput - leftStartCount;
-                  rightTurned = rightInput - rightStartCount;
+                  abs(leftTurned = leftInput - leftStartCount);
+                  abs(rightTurned = rightInput - rightStartCount);
+
+                  leftMotor.writeMicroseconds(1500);
+                  rightMotor.writeMicroseconds(1500);
+
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
 
                   if (rightTurned > turnCalc(360) && leftTurned > turnCalc(360)) {
                     rightTurned -= turnCalc(360);
                     leftTurned -= turnCalc(360);
                   }
                 }
+                else {
 
-                // send the speeds to the motors
-                leftMotor.writeMicroseconds(leftMotorSpeed);
-                rightMotor.writeMicroseconds(rightMotorSpeed);
+                  // send the speeds to the motors
+                  leftMotor.writeMicroseconds(leftMotorSpeed);
+                  rightMotor.writeMicroseconds(rightMotorSpeed);
+                }
 
                 break;
               }
@@ -760,8 +833,14 @@ void loop() {
                 //updates front distance
                 middlePing();
 
-                //just chills for 1.5 seconds hopeing US values arent trash
-                if (!didOnce && (millis() - beaconDelay) > 1500) {
+                //
+                irCheck();
+
+                //just chills for 1.5 seconds hoping US values arent trash
+                if (!didOnce) {
+                  Serial.print("\n\n ");
+                  Serial.println("--------newCase----------");
+                  Serial.print("\n\n");
 
                   //stores starting encoder position for this state
                   leftStartCount = encoder_LeftMotor.getRawPosition();
@@ -771,8 +850,8 @@ void loop() {
                   thirdFrontDist = middleEchoTime / 58;
 
                   //go forward measured ultrasonic distance plus 5 more to be sure
-                  leftSetpoint = leftStartCount + distanceCalc(thirdFrontDist + 10);
-                  rightSetpoint = rightStartCount + distanceCalc(thirdFrontDist + 10);
+                  leftSetpoint = leftStartCount + distanceCalc(600);
+                  rightSetpoint = rightStartCount + distanceCalc(600);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-450, 450);
@@ -785,49 +864,57 @@ void loop() {
                   didOnce = true;
                 }
 
-                //only do this after top part is excecuted
-                else {
+                //reads updated encoder values
+                leftInput = encoder_LeftMotor.getRawPosition();
+                rightInput = encoder_RightMotor.getRawPosition();
 
-                  //reads updated encoder values
-                  leftInput = encoder_LeftMotor.getRawPosition();
-                  rightInput = encoder_RightMotor.getRawPosition();
+                //PID library does math
+                leftPID.Compute();
+                rightPID.Compute();
 
-                  //PID library does math
-                  leftPID.Compute();
-                  rightPID.Compute();
-
-                  //left and right motor speed from PID
-                  leftMotorSpeed = 1500 + leftOutput;
-                  rightMotorSpeed = 1500 + rightOutput;
+                //left and right motor speed from PID
+                leftMotorSpeed = 1500 + leftOutput;
+                rightMotorSpeed = 1500 + rightOutput + 5;
 
 
-                  //if the bot isnt pointing in the right direction go back to last case and find it again
-                  //as long as bot isnt too close (30 cm)
+                //                if((millis()-ledMillis)>500){
+                //                ledMillis = millis();
+                //
+                //                Serial.print("leftSetPoint ");
+                //                Serial.print(leftSetpoint);
+                //                Serial.print("rightSetPoint ");
+                //                Serial.println(rightSetpoint);
+                //                Serial.print("leftInput ");
+                //                Serial.print(leftInput);
+                //                Serial.print("rightInput ");
+                //                Serial.println(rightInput);
+                //                Serial.print("\n\n");
+                //                }
 
-                  //                if (irInput != 53 && (middleEchoTime / 58) > 30) {
-                  //                  currentState = 3;
-                  //                  didOnce = false;
-                  //                  leftMotorSpeed = 1500;
-                  //                  rightMotorSpeed = 1500;
-                  //                }
 
 
-                  //if beacon is off and front distance is +- 5 cm from the targeted distance (should still be more than enough in theory)
-                  // else if ( irInput != 53 && (leftInput) >= (leftSetpoint - distanceCalc(5)) && (leftInput) <= (leftSetpoint + distanceCalc(5)) ) {
 
-                  if (irInput != 53 && middleEchoTime / 58 < 6 ) {
-                    currentState++;
-                    didOnce = false;
-                    leftMotorSpeed = 1500;
-                    rightMotorSpeed = 1500;
-                    lastLeftStartCount = leftStartCount;
-                    lastRightStartCount = rightStartCount;
-                  }
 
+                if (irInput != 53 && irInput != 48 && middleEchoTime / 58 < 8 ) {
+                  Serial.print("\n\n ");
+                  Serial.println("--------newCase----------");
+                  Serial.print("\n\n");
+                  currentState++;
+                  didOnce = false;
+                  leftMotorSpeed = 1500;
+                  rightMotorSpeed = 1500;
+                  lastLeftStartCount = leftStartCount;
+                  lastRightStartCount = rightStartCount;
+                  leftMotor.writeMicroseconds(1500);
+                  rightMotor.writeMicroseconds(1500);
                 }
-                // send the speeds to the motors
-                leftMotor.writeMicroseconds(leftMotorSpeed);
-                rightMotor.writeMicroseconds(rightMotorSpeed);
+                else {
+                  // send the speeds to the motors
+                  leftMotor.writeMicroseconds(leftMotorSpeed);
+                  rightMotor.writeMicroseconds(rightMotorSpeed);
+                }
+
+
 
                 break;
               }
@@ -867,7 +954,7 @@ void loop() {
                 leftMotorSpeed = 1500 + leftOutput;
                 rightMotorSpeed = 1500 + rightOutput;
 
-                if ( (leftInput) >= (leftSetpoint - distanceCalc(2)) && (leftInput) <= (leftSetpoint + distanceCalc(2)) ) {
+                if ( (leftInput) >= (leftSetpoint - distanceCalc(20)) && (leftInput) <= (leftSetpoint + distanceCalc(20)) ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -891,9 +978,13 @@ void loop() {
                   leftStartCount = encoder_LeftMotor.getRawPosition();
                   rightStartCount = encoder_RightMotor.getRawPosition();
 
-                  //turn around about perpendicular to the bridge
-                  leftSetpoint = leftStartCount - leftTurned + turnCalc(180);
-                  rightSetpoint = rightStartCount + rightTurned - turnCalc(180);
+                  //                  //turn around about perpendicular to the bridge
+                  //                  leftSetpoint = leftStartCount - leftTurned + turnCalc(180);
+                  //                  rightSetpoint = rightStartCount + rightTurned - turnCalc(180);
+
+                  //                  //turn around about perpendicular to the bridge
+                  leftSetpoint = leftStartCount + turnCalc(180);
+                  rightSetpoint = rightStartCount - turnCalc(180);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-150, 150);
@@ -917,7 +1008,7 @@ void loop() {
                 rightMotorSpeed = 1500 + rightOutput;
 
                 //if rotated +- 1 target degrees, increment state
-                if ( (leftInput) >= (leftSetpoint - turnCalc(1)) && (leftInput) <= (leftSetpoint + turnCalc(1)) ) {
+                if ( (leftInput) >= (leftSetpoint - turnCalc(2)) && (leftInput) <= (leftSetpoint + turnCalc(2)) ) {
                   currentState++;
                   didOnce = false;
                   leftMotorSpeed = 1500;
@@ -931,28 +1022,255 @@ void loop() {
                 break;
               }
 
-
-            default://for state switch
+            case 7:// go striaght till half way again
               {
+
+                if (!didOnce) {
+                  didOnce = true;
+
+                  //stores starting encoder position for this state
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
+
+                  //find forward distance
+                  middlePing();
+                  secondFrontDist = middleEchoTime / 58;
+
+                  //set target of PID as halfway of forward direction
+                  leftSetpoint = leftStartCount + distanceCalc(40);
+                  rightSetpoint = leftStartCount + distanceCalc(40);
+
+                  //setting speeds
+                  leftPID.SetOutputLimits(-450, 450);
+                  rightPID.SetOutputLimits(-450, 450);
+
+                  //setting the tuning for PID
+                  leftPID.SetTunings(Kp, Ki, Kd);
+                  rightPID.SetTunings(Kp, Ki, Kd);
+                }
+
+                //updates front distance
+                //middlePing();
+
+                //reads updated encoder values
+                leftInput = encoder_LeftMotor.getRawPosition();
+                rightInput = encoder_RightMotor.getRawPosition();
+
+                //PID library does math
+                leftPID.Compute();
+                rightPID.Compute();
+
+                //left and right motor speed from PID
+                leftMotorSpeed = 1500 + leftOutput;
+                rightMotorSpeed = 1500 + rightOutput;
+
+                //if front distance is +- 5 cm from the half way mark of the forward distance
+                //                if ( (middleEchoTime / 58) >= ((secondFrontDist / 2) - 5) && (middleEchoTime / 58) <= ((secondFrontDist / 2) + 5) ) {
+                //                  currentState++;
+                //                  didOnce = false;
+                //                  leftMotorSpeed = 1500;
+                //                  rightMotorSpeed = 1500;
+                //                }
+
+                if ( (leftInput) >= (leftSetpoint - distanceCalc(2)) && (leftInput) <= (leftSetpoint + distanceCalc(2)) ) {
+                  currentState++;
+                  didOnce = false;
+                  leftMotorSpeed = 1500;
+                  rightMotorSpeed = 1500;
+                }
+
+                // send the speeds to the motors
+                leftMotor.writeMicroseconds(leftMotorSpeed);
+                rightMotor.writeMicroseconds(rightMotorSpeed);
+
+
+                break;
+              }
+
+            case 8://spin around a few times until IR sensor is read
+              {
+
+                if (!didOnce) {
+                  didOnce = true;
+
+                  //stores starting encoder position for this state
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
+
+                  //set target of PID as 1080 degrees to the right
+                  leftSetpoint = leftStartCount + turnCalc(1080);
+                  rightSetpoint = rightStartCount - turnCalc(1080);
+
+                  //setting speeds (make this smaller to spin slower, might have to tune turnPID values but maybe not, if needed try reducing turnKd by increments of 0.02)
+                  leftPID.SetOutputLimits(-75, 75);
+                  rightPID.SetOutputLimits(-75, 75);
+
+                  //setting the tuning for PID
+                  leftPID.SetTunings(turnKp, turnKi, turnKd);
+                  rightPID.SetTunings(turnKp, turnKi, turnKd);
+                }
+
+                //reads updated encoder values
+                leftInput = encoder_LeftMotor.getRawPosition();
+                rightInput = encoder_RightMotor.getRawPosition();
+
+                //PID library does math
+                leftPID.Compute();
+                rightPID.Compute();
+
+                //left and right motor speed from PID
+                leftMotorSpeed = 1500 + leftOutput;
+                rightMotorSpeed = 1500 + rightOutput;
+
+
+                //                if((millis()-ledMillis)>500){
+                //                ledMillis = millis();
+                //
+                //                Serial.print("leftSetPoint ");
+                //                Serial.print(leftSetpoint);
+                //                Serial.print("rightSetPoint ");
+                //                Serial.println(rightSetpoint);
+                //                Serial.print("leftInput ");
+                //                Serial.print(leftInput);
+                //                Serial.print("rightInput ");
+                //                Serial.println(rightInput);
+                //                Serial.print("\n\n");
+                //                }
+                //
+                //update IR values
+                irCheck();
+
+                //increments states when IR is found
+                if (irInput == '5' ||  irInput == 53) {
+
+                  currentState++;
+                  didOnce = false;
+                  leftMotorSpeed = 1500;
+                  rightMotorSpeed = 1500;
+                  beaconDelay = millis();
+
+                  leftTurned = leftInput - leftStartCount;
+                  rightTurned = rightInput - rightStartCount;
+
+                  leftMotor.writeMicroseconds(1500);
+                  rightMotor.writeMicroseconds(1500);
+
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
+
+                  if (rightTurned > turnCalc(360) && leftTurned > turnCalc(360)) {
+                    rightTurned -= turnCalc(360);
+                    leftTurned -= turnCalc(360);
+                  }
+                }
+                else {
+
+                  // send the speeds to the motors
+                  leftMotor.writeMicroseconds(leftMotorSpeed);
+                  rightMotor.writeMicroseconds(rightMotorSpeed);
+                }
+
+                break;
+              }
+
+            case 9:// go straight
+              {
+
+                //updates front distance
+                middlePing();
+
+                //
+                irCheck();
+
+                //just chills for 1.5 seconds hoping US values arent trash
+                if (!didOnce) {
+                  Serial.print("\n\n ");
+                  Serial.println("--------newCase----------");
+                  Serial.print("\n\n");
+
+                  //stores starting encoder position for this state
+                  leftStartCount = encoder_LeftMotor.getRawPosition();
+                  rightStartCount = encoder_RightMotor.getRawPosition();
+
+                  //find forward distance
+                  thirdFrontDist = middleEchoTime / 58;
+
+                  //go forward measured ultrasonic distance plus 5 more to be sure
+                  leftSetpoint = leftStartCount + distanceCalc(600);
+                  rightSetpoint = rightStartCount + distanceCalc(600);
+
+                  //setting speeds
+                  leftPID.SetOutputLimits(-450, 450);
+                  rightPID.SetOutputLimits(-450, 450);
+
+                  //setting the tuning for PID
+                  leftPID.SetTunings(Kp, Ki, Kd);
+                  rightPID.SetTunings(Kp, Ki, Kd);
+
+                  didOnce = true;
+                }
+
+                //reads updated encoder values
+                leftInput = encoder_LeftMotor.getRawPosition();
+                rightInput = encoder_RightMotor.getRawPosition();
+
+                //PID library does math
+                leftPID.Compute();
+                rightPID.Compute();
+
+                //left and right motor speed from PID
+                leftMotorSpeed = 1500 + leftOutput;
+                rightMotorSpeed = 1500 + rightOutput + 5;
+
+
+                //                if((millis()-ledMillis)>500){
+                //                ledMillis = millis();
+                //
+                //                Serial.print("leftSetPoint ");
+                //                Serial.print(leftSetpoint);
+                //                Serial.print("rightSetPoint ");
+                //                Serial.println(rightSetpoint);
+                //                Serial.print("leftInput ");
+                //                Serial.print(leftInput);
+                //                Serial.print("rightInput ");
+                //                Serial.println(rightInput);
+                //                Serial.print("\n\n");
+                //                }
+
+
+
+
+
+                if (irInput != 53 && irInput != 48 && middleEchoTime / 58 < 8 ) {
+                  Serial.print("\n\n ");
+                  Serial.println("--------newCase----------");
+                  Serial.print("\n\n");
+                  currentState++;
+                  didOnce = false;
+                  leftMotorSpeed = 1500;
+                  rightMotorSpeed = 1500;
+                  lastLeftStartCount = leftStartCount;
+                  lastRightStartCount = rightStartCount;
+                  leftMotor.writeMicroseconds(1500);
+                  rightMotor.writeMicroseconds(1500);
+                }
+                else {
+                  // send the speeds to the motors
+                  leftMotor.writeMicroseconds(leftMotorSpeed);
+                  rightMotor.writeMicroseconds(rightMotorSpeed);
+                }
+                break;
+              }
+
+
+            default: {
                 leftMotor.writeMicroseconds(motorStop);
                 rightMotor.writeMicroseconds(motorStop);
               }
 
-              ///End of state switch
           }
-
-
-
-          ////end of mode 4 before break and bracket
         }
-        break;
       }
-
-    default: {
-        leftMotor.writeMicroseconds(motorStop);
-        rightMotor.writeMicroseconds(motorStop);
-      }
-
   }
 
   if ((millis() - ledMillis) > blinkInterval) {
