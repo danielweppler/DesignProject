@@ -260,7 +260,7 @@ void loop() {
 
           switch (currentState) {
 
-            case 0://spin around a few times until IR sensor is read
+              case 2://spin around a few times until IR sensor is read
               {
 
                 if (!didOnce) {
@@ -346,7 +346,7 @@ void loop() {
                 break;
               }
 
-            case 1:// go straight
+            case 0:// go straight
               {
 
                 //updates front distance
@@ -426,6 +426,7 @@ void loop() {
                   lastRightStartCount = rightStartCount;
                   leftMotor.writeMicroseconds(1500);
                   rightMotor.writeMicroseconds(1500);
+                  beaconDelay = millis();
                 }
                 else {
                   // send the speeds to the motors
@@ -438,7 +439,19 @@ void loop() {
                 break;
               }
 
-            case 2://reverse to about where you were done turning
+            case 1: {
+
+                leftMotor.writeMicroseconds(1500);
+                rightMotor.writeMicroseconds(1500);
+
+                if ((millis() - beaconDelay) > 500) {
+                  currentState++;
+                }
+
+                break;
+              }
+
+              //case 1://reverse to about where you were done turning
               {
                 if (!didOnce) {
 
@@ -487,7 +500,7 @@ void loop() {
                 break;
               }
 
-            case 3:
+              //case 3:
               {
 
                 if (!didOnce) {
@@ -795,7 +808,7 @@ void loop() {
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == '0' || irInput == 48  ) {
+                if (irInput == '5' || irInput == 53  ) {
 
                   currentState++;
                   didOnce = false;
@@ -907,6 +920,7 @@ void loop() {
                   lastRightStartCount = rightStartCount;
                   leftMotor.writeMicroseconds(1500);
                   rightMotor.writeMicroseconds(1500);
+                  beaconDelay = millis();
                 }
                 else {
                   // send the speeds to the motors
@@ -918,8 +932,19 @@ void loop() {
 
                 break;
               }
+            case 5: {
 
-            case 5://reverse to about where you were done turning
+                leftMotor.writeMicroseconds(1500);
+                rightMotor.writeMicroseconds(1500);
+
+                if ((millis() - beaconDelay) > 1000) {
+                  currentState++;
+                }
+
+                break;
+              }
+
+            case 6://reverse to about where you were done turning
               {
                 if (!didOnce) {
 
@@ -968,7 +993,7 @@ void loop() {
                 break;
               }
 
-            case 6:
+            case 7:
               {
 
                 if (!didOnce) {
@@ -1022,7 +1047,7 @@ void loop() {
                 break;
               }
 
-            case 7:// go striaght till half way again
+            case 8:// go striaght till half way again
               {
 
                 if (!didOnce) {
@@ -1037,8 +1062,8 @@ void loop() {
                   secondFrontDist = middleEchoTime / 58;
 
                   //set target of PID as halfway of forward direction
-                  leftSetpoint = leftStartCount + distanceCalc(40);
-                  rightSetpoint = leftStartCount + distanceCalc(40);
+                  leftSetpoint = leftStartCount + distanceCalc(125);
+                  rightSetpoint = leftStartCount + distanceCalc(125);
 
                   //setting speeds
                   leftPID.SetOutputLimits(-450, 450);
@@ -1087,7 +1112,7 @@ void loop() {
                 break;
               }
 
-            case 8://spin around a few times until IR sensor is read
+            case 9://spin around a few times until IR sensor is read
               {
 
                 if (!didOnce) {
@@ -1141,7 +1166,7 @@ void loop() {
                 irCheck();
 
                 //increments states when IR is found
-                if (irInput == '5' ||  irInput == 53) {
+                if (irInput == '0' ||  irInput == 48) {
 
                   currentState++;
                   didOnce = false;
@@ -1173,7 +1198,7 @@ void loop() {
                 break;
               }
 
-            case 9:// go straight
+            case 10:// go straight
               {
 
                 //updates front distance

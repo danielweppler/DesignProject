@@ -35,28 +35,28 @@ const int notUsed = 12;
 
 //constant values like motor speeds/ positions--------
 
-const int motorSpeed = 1500;
-const int motorStop = 1500;
-const int leftOffset = 0;
-const int rightOffset = 0;
-const int countsPerRev = 627.2;
-const int revs = 5;
-const int blinkInterval = 500;
+const  int motorSpeed = 1500;
+const  int motorStop = 1500;
+const  int leftOffset = 0;
+const  int rightOffset = 0;
+const  int countsPerRev = 627.2;
+const  int revs = 5;
+const  int blinkInterval = 500;
 
 
 //VARIABLES------------------
 
-unsigned long leftEchoTime;
-unsigned long middleEchoTime;
-unsigned long middleTempTime;
-unsigned long rightEchoTime;
-unsigned int rightMotorSpeed;
-unsigned int leftMotorSpeed;
+unsigned  long leftEchoTime;
+unsigned  long middleEchoTime;
+unsigned  long middleTempTime;
+unsigned  long rightEchoTime;
+unsigned  int rightMotorSpeed;
+unsigned  int leftMotorSpeed;
 //other delay
-unsigned long beaconDelay = 0;
+unsigned  long beaconDelay = 0;
 
 //pid
-double leftSetpoint, leftInput, leftOutput;
+double  leftSetpoint,  leftInput ,  leftOutput;
 double Kp = 1.01, Ki = 0.02, Kd = 0.115;
 double turnKp = 1.4, turnKi = 0.2, turnKd = 0.2;
 double rightSetpoint, rightInput, rightOutput;
